@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.google.gson.Gson;
+import server.controllers.UserController;
 import server.models.User;
 import server.providers.UserProvider;
 import server.util.Auth;
@@ -28,6 +29,7 @@ public class AuthEndpoint {
     //Creating objects of the classes UserProvider and User
 
     ArrayList<String> tokenArray = new ArrayList<String>();
+
 
     UserProvider userProvider = new UserProvider();
     User foundUser = new User();
@@ -67,9 +69,13 @@ public class AuthEndpoint {
                 timevalue = (System.currentTimeMillis() * 1000) + 20000205238L;
                 Date expDate = new Date(timevalue);
 
+
                 token = JWT.create().withClaim("email", foundUser.getEmail()).withKeyId(String.valueOf(foundUser.getId()))
                         .withExpiresAt(expDate).withIssuer("ROFL").sign(algorithm);
                 tokenArray.add(token);
+
+
+
             } catch (UnsupportedEncodingException e) {
 
                 log.writeLog("DB", this.getClass(), ("An UnsupportedEncoding occurred while running AuthUser - " +
@@ -87,7 +93,10 @@ public class AuthEndpoint {
             log.writeLog(this.getClass().getName(), this.getClass(), ("AuthUser was successful and user was authorized - " +
                     "User active was: " + authUser.getEmail()), 0);
 
+            //return Response.status(200).type("json/application").entity(new Gson().toJson(foundUser.getId())).build();
             return Response.status(200).type("json/application").entity(new Gson().toJson(token)).build();
+
+
         } else {
 
             log.writeLog(this.getClass().getName(), this.getClass(), ("AuthUser was successful but user not authorized - " +

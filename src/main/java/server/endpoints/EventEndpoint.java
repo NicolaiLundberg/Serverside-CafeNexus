@@ -37,7 +37,7 @@ import java.util.Properties;
 /**
  * Created by Filip on 10-10-2017.
  */
-
+@Secured
 @Path("/events")
 public class EventEndpoint {
 
@@ -71,7 +71,7 @@ public class EventEndpoint {
         log.writeLog(this.getClass().getName(),this.getClass(),("getAllEvents was successful - " +
                 "User active was: " + AuthenticationFilter.userEmailByToken),0);
 
-        return Response.status(200).type("text/plain").entity(new Gson().toJson(allEvents)).build();
+        return Response.status(200).type("application/json").entity(new Gson().toJson(allEvents)).build();
 
 
     }
@@ -114,7 +114,6 @@ public class EventEndpoint {
                 "User active was: " + AuthenticationFilter.userEmailByToken),0);
 
         return Response.status(200).type("application/json").entity(new Gson().toJson(event)).build();
-
     }
 
     /**
