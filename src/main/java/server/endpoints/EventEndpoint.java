@@ -172,8 +172,6 @@ public class EventEndpoint {
                 "User active was: " + AuthenticationFilter.userEmailByToken),0);
 
         return Response.status(201).type("json/application").entity(new Gson().toJson("Event Created")).build();
-
-
     }
 
     /** This method lets the user subscribe to a specific event.
