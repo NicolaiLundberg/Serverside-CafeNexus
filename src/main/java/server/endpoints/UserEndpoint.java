@@ -96,7 +96,7 @@ public class UserEndpoint {
         log.writeLog(this.getClass().getName(), this.getClass(), ("getUser was successful - " +
                 "User active was: " + AuthenticationFilter.userEmailByToken), 0);
 
-        return Response.status(200).type("application/json").entity(new Gson().toJson(user)).build();
+        return Response.status(200).type("application/json").entity(new Gson().toJson(user.getFirstName() + " " + user.getLastName())).build();
     }
 
     /**
@@ -147,7 +147,7 @@ public class UserEndpoint {
             log.writeLog("DB", this.getClass(), ("An SQL exception occurred while running createUser"
                     + "User active was: " + AuthenticationFilter.userEmailByToken + "\n"), 1);
 
-            return Response.status(501).type("text/plain").entity("Server couldn't store the validated user object (SQL Error)").build();
+            return Response.status(501).type("json/application").entity(new Gson().toJson("Server couldn't store the validated user object (SQL Error)")).build();
 
         }
 

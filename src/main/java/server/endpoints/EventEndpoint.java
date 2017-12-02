@@ -3,6 +3,7 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controllers.UserController;
 import server.models.Event;
+import server.models.Post;
 import server.providers.EventProvider;
 
 import javax.ws.rs.GET;
@@ -91,6 +92,7 @@ public class EventEndpoint {
         EventProvider eventProvider = new EventProvider();
         PostProvider postProvider = new PostProvider();
         UserController userController = new UserController();
+
         Event event;
 
         try {
@@ -98,9 +100,10 @@ public class EventEndpoint {
 
             event.getPosts().addAll(postProvider.getAllPostsByEventId(event_id));
 
+
             //Get all participants in the event
 
-            event.getParticipants().addAll(userController.getParticipants(event_id));
+          //  event.getParticipants().addAll(userController.getParticipants(event_id));
         } catch (SQLException e) {
 
             log.writeLog("DB",this.getClass(),("An SQL exception occurred while running getEvent - " +
@@ -162,13 +165,13 @@ public class EventEndpoint {
             log.writeLog("DB",this.getClass(),("An SQL exception occurred while running createEvent - " +
                     "User active was: " + AuthenticationFilter.userEmailByToken),1);
 
-            return Response.status(501).type("text/plain").entity("Server could not store the validated event object (SQL Error) ").build();
+            return Response.status(501).type("json/application").entity(new Gson().toJson("Server could not store the validated event object (SQL Error) ")).build();
         }
 
         log.writeLog(this.getClass().getName(),this.getClass(),("createEvent was successful - " +
                 "User active was: " + AuthenticationFilter.userEmailByToken),0);
 
-        return Response.status(201).type("text/plain").entity("Event Created").build();
+        return Response.status(201).type("json/application").entity(new Gson().toJson("Event Created")).build();
 
 
     }
